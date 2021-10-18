@@ -1,0 +1,84 @@
+     1                                 %line 1+1 task1.asm
+     2                                 [section .data]
+     3 00000000 506C6561736520656E-     msg1 db "Please enter a string: "
+     4 00000000 746572206120737472-
+     5 00000000 696E673A20         
+     6 00000017 546865206C656E6774-     msg2 db "The length of the string is: "
+     7 00000017 68206F662074686520-
+     8 00000017 737472696E67206973-
+     9 00000017 3A20               
+    10 00000034 00                      num db 0
+    11 00000035 00                      length db 0
+    12 00000036 0A                      blank db '', 0xA
+    13                                 
+    14                                 [section .text]
+    15                                 [global _start]
+    16                                 
+    17                                  _start:
+    18 00000000 48C7C001000000          mov rax, 1
+    19 00000007 48C7C701000000          mov rdi, 1
+    20 0000000E 48C7C6[00000000]        mov rsi, msg1
+    21 00000015 48C7C217000000          mov rdx, 23
+    22 0000001C 0F05                    syscall
+    23                                 
+    24 0000001E 48C7C000000000          mov rax, 0
+    25 00000025 48C7C700000000          mov rdi, 0
+    26 0000002C 48C7C6[00000000]        mov rsi, string
+    27 00000033 48C7C24C040000          mov rdx, 1100
+    28 0000003A 0F05                    syscall
+    29                                 
+    30 0000003C 4831D2                  xor rdx,rdx
+    31 0000003F 4831C9                  xor rcx,rcx
+    32 00000042 48C7C2[00000000]        mov rdx, string
+    33 00000049 4889D6                  mov rsi,rdx
+    34                                 
+    35                                  Start:
+    36 0000004C 803E00                  cmp byte[rsi], 0
+    37 0000004F 7406                    je endLoop
+    38 00000051 48FFC1                  inc rcx
+    39 00000054 48FFC6                  inc rsi
+    40 00000057 EBF1                    jmp Start
+    41                                 
+    42                                  endLoop:
+    43                                 
+    44 00000059 4889C8                  mov rax, rcx
+    45 0000005C 4831D2                  xor rdx,rdx
+    46 0000005F 49C7C20A000000          mov r10,10
+    47 00000066 49F7F2                  div r10
+    48                                 
+    49 00000069 4883C030                add rax, '0'
+    50 0000006D 4883C230                add rdx, '0'
+    51 00000071 4989C3                  mov r11, rax
+    52 00000074 4989D4                  mov r12, rdx
+    53 00000077 4C891C25[00000000]      mov [num], r11
+    54 0000007F 4C892425[00000000]      mov [length], r12
+    55 00000087 4883C101                add rcx, 1
+    56                                 
+    57 0000008B 48C7C001000000          mov rax,1
+    58 00000092 48C7C701000000          mov rdi,1
+    59 00000099 48C7C21D000000          mov rdx, 29
+    60 000000A0 488D3425[00000000]      lea rsi, [msg2]
+    61 000000A8 0F05                    syscall
+    62                                 
+    63 000000AA 48C7C001000000          mov rax,1
+    64 000000B1 48C7C701000000          mov rdi,1
+    65 000000B8 48C7C201000000          mov rdx, 1
+    66 000000BF 488D3425[00000000]      lea rsi, [num]
+    67 000000C7 0F05                    syscall
+    68                                 
+    69 000000C9 48C7C001000000          mov rax,1
+    70 000000D0 48C7C701000000          mov rdi,1
+    71 000000D7 48C7C201000000          mov rdx, 1
+    72 000000DE 488D3425[00000000]      lea rsi, [length]
+    73 000000E6 0F05                    syscall
+    74                                 
+    75                                  End:
+    76 000000E8 48C7C001000000          mov rax, 1
+    77 000000EF 48C7C701000000          mov rdi, 1
+    78 000000F6 48C7C6[00000000]        mov rsi, blank
+    79 000000FD 48C7C201000000          mov rdx, 1
+    80 00000104 0F05                    syscall
+    81                                 
+    82 00000106 B801000000              mov eax, 1
+    83 0000010B BB00000000              mov ebx, 0
+    84 00000110 CD80                    int 0x80
