@@ -1,0 +1,63 @@
+     1                                 %line 1+1 test2.asm
+     2                                 [section .data]
+     3 00000000 696E70757466696C65-     name db "inputfile.txt"
+     4 00000000 2E747874           
+     5 0000000D 6D7966696C652E7478-     file_name db 'myfile.txt'
+     6 0000000D 74                 
+     7                                 [section .bss]
+     8 00000000 F401                    buffer_data dw 500
+     9 00000002 <gap>                   fd_out resb 1
+    10 00000003 <gap>                   fd_in resb 1
+    11 00000004 <gap>                   info resb 26
+    12                                 [section .text]
+    13                                 [global _start]
+    14                                 _start:
+    15 00000000 48C7C002000000          mov rax, 2
+    16 00000007 48C7C7[00000000]        mov rdi, name
+    17 0000000E 48C7C600000000          mov rsi, 0
+    18 00000015 48C7C209030000          mov rdx, 0777
+    19 0000001C 0F05                    syscall
+    20                                 
+    21 0000001E 4889C7                  mov rdi, rax
+    22 00000021 48C7C000000000          mov rax, 0
+    23 00000028 48C7C6[00000000]        mov rsi, buffer_data
+    24 0000002F 48C7C2F4010000          mov rdx, 500
+    25 00000036 0F05                    syscall
+    26                                 
+    27 00000038 4D31C0                  xor r8, r8
+    28 0000003B 49C7C0[00000000]        mov r8, buffer_data
+    29                                 
+    30                                 
+    31 00000042 48C7C008000000          mov rax, 8
+    32 00000049 48C7C3[00000000]        mov rbx, file_name
+    33 00000050 48C7C109030000          mov rcx, 0777
+    34 00000057 CD80                    int 0x80
+    35                                 
+    36 00000059 890425[00000000]        mov [fd_out], eax
+    37                                 
+    38                                 
+    39 00000060 48C7C220030000          mov rdx, 800
+    40 00000067 4C89C1                  mov rcx, r8
+    41 0000006A 488B1C25[00000000]      mov rbx, [fd_out]
+    42 00000072 48C7C004000000          mov rax,4
+    43 00000079 CD80                    int 0x80
+    44                                 
+    45                                 
+    46 0000007B 48C7C006000000          mov rax, 6
+    47 00000082 488B1C25[00000000]      mov rbx, [fd_out]
+    48                                 
+    49 0000008A 48C7C701000000          mov rdi, 1
+    50 00000091 48C7C6[00000000]        mov rsi, buffer_data
+    51 00000098 48C7C220030000          mov rdx, 800
+    52 0000009F 48C7C001000000          mov rax, 1
+    53 000000A6 0F05                    syscall
+    54                                 
+    55 000000A8 48C7C701000000          mov rdi, 1
+    56 000000AF 4C89C6                  mov rsi, r8
+    57 000000B2 48C7C220030000          mov rdx, 800
+    58 000000B9 48C7C001000000          mov rax, 1
+    59 000000C0 0F05                    syscall
+    60                                 
+    61 000000C2 48C7C03C000000          mov rax, 60
+    62 000000C9 48C7C700000000          mov rdi, 0
+    63 000000D0 0F05                    syscall

@@ -26,7 +26,7 @@ GLOBAL encryptChar
         cmp r10,26
         jz end1
     
-        mov r15, [rsp+mPtr] 
+        mov r15, [rsp +mPtr] 
         mov r15, [r15]
         add r15, r10
 
@@ -60,8 +60,7 @@ GLOBAL encryptChar
         inc r11
         jmp loop2
     end2:
-
-    mov [rsp + val2], rax  
+        mov [rsp + val2], rax  
 
         mov r10, [rsp + val1]
         mov r11, [rsp + val2]
@@ -72,6 +71,6 @@ GLOBAL encryptChar
         add r15, r10
         mov rax, [r15]
         mov rax, mPtr 
-    leave
-    ret
+        leave
+        ret
 
